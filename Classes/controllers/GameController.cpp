@@ -24,6 +24,8 @@ void GameController::startGame(int levelId) {
 	_stackController = StackController::create();
 	_undoManager = UndoManager::create();
 	initView(_gameModel);
+	_playFieldController->initView(_gameModel, _gameView);
+	_playFieldController->setCardMovedToStackCallback(CC_CALLBACK_1(GameController::handlePlayFieldMoveToStack, this));
 	_stackController->initView(_gameModel, _gameView);
 	_stackController->setCardMovedToUsedallback(CC_CALLBACK_0(GameController::handleStackMoveToUsed, this));
 };
