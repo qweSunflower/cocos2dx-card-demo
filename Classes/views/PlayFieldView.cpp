@@ -16,23 +16,19 @@ PlayFieldView* PlayFieldView::create() {
 }
 
 bool PlayFieldView::init() {
-    // _backgroundLayer = cocos2d::LayerColor::create(cocos2d::Color4B(0, 128, 0, 255), 1080, 1500);
-    // _backgroundLayer->setLocalZOrder(-10);
-    // addChild(_backgroundLayer);
-    _mouseListener = cocos2d::EventListenerMouse::create();
-    _mouseListener->onMouseDown = CC_CALLBACK_1(PlayFieldView::_onMouseDown, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
-    // _backgroundLayer->setPositionY(580);
+    _mouseListener = cocos2d::EventListenerMouse::create(); //  创建鼠标事件监听器
+    _mouseListener->onMouseDown = CC_CALLBACK_1(PlayFieldView::_onMouseDown, this); //  设置鼠标按下事件的回调函数，绑定当前类的_onMouseDown方法
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this); //  以场景图优先级将监听器注册到事件分发器
     return true;
 }
 
 void PlayFieldView::addCardView(CardView* cardView, bool reSetPositon) {
-    _cardViews.push_back(cardView);
-    if (reSetPositon) {
-        cardView->setPosition(convertToNodeSpace(cardView->getWorldPosition()));
+    _cardViews.push_back(cardView); //  将卡牌视图添加到容器中
+    if (reSetPositon) { //  如果需要重置位置
+        cardView->setPosition(convertToNodeSpace(cardView->getWorldPosition())); //  将世界坐标转换为节点本地坐标并设置位置
     }
-    addChild(cardView);
-    cardView->release();
+    addChild(cardView); //  将卡牌视图作为子节点添加
+    cardView->release(); //  释放卡牌视图的引用计数
 }
 
 
@@ -41,31 +37,31 @@ std::vector<CardView*>::iterator PlayFieldView::getCardViewIt(int cardId) {
     while (it < _cardViews.end() && (*it)->getCardId() != cardId) {
         it ++;
     }
-    if (it == _cardViews.end())
+    if (it == _cardViews.end()) //  如果遍历完整个容器仍未找到匹配项，返回容器末尾迭代器
         return _cardViews.end();
-    return it;
+    return it; //  返回找到的匹配项的迭代器
 }
 
 CardView* PlayFieldView::popCardView(int cardId) {
-    auto it = getCardViewIt(cardId);
-    CardView* cardView = *it;
-    _cardViews.erase(it);
-    cardView->setWorldPosition(convertToWorldSpace(cardView->getPosition()));
-    cardView->retain();
-    cardView->removeFromParent();
-    return cardView;
+    auto it = getCardViewIt(cardId); //  获取指定ID的卡片视图迭代器
+    CardView* cardView = *it; //  获取迭代器指向的卡片视图
+    _cardViews.erase(it); //  从容器中移除该卡片视图
+    cardView->setWorldPosition(convertToWorldSpace(cardView->getPosition())); //  将卡片视图的位置转换为世界坐标
+    cardView->retain(); //  增加引用计数，防止对象被释放
+    cardView->removeFromParent(); //  从父节点中移除卡片视图
+    return cardView; //  返回弹出的卡片视图
 }
 
 
 void PlayFieldView::_onMouseDown(cocos2d::Event* event) {
-    cocos2d::EventMouse* e = static_cast<cocos2d::EventMouse*>(event);
-    auto pos = e->getLocationInView();
-    if (_cardViews.empty() || e->getMouseButton() != cocos2d::EventMouse::MouseButton::BUTTON_LEFT) return;
-    for (auto cardIt = _cardViews.rbegin(); cardIt < _cardViews.rend(); cardIt++) {
-        if ((*cardIt)->containsPoint(pos) && _onCardClickCallback) {
-            _clickCardView = (*cardIt);
-            _onCardClickCallback((*cardIt)->getCardId());
-            break;
+    cocos2d::EventMouse* e = static_cast<cocos2d::EventMouse*>(event); //  将事件对象转换为鼠标事件对象，以获取鼠标相关的具体信息
+    auto pos = e->getLocationInView(); //  获取鼠标在视图中的点击位置坐标
+    if (_cardViews.empty() || e->getMouseButton() != cocos2d::EventMouse::MouseButton::BUTTON_LEFT) return; //  如果没有卡牌视图或者点击的不是鼠标左键，则直接返回
+    for (auto cardIt = _cardViews.rbegin(); cardIt < _cardViews.rend(); cardIt++) { //  从后向前遍历卡牌视图集合，这样最上层的卡牌会被优先检测
+        if ((*cardIt)->containsPoint(pos) && _onCardClickCallback) { //  检查点击位置是否在当前卡牌范围内，并且存在卡牌点击回调函数
+            _clickCardView = (*cardIt); //  记录被点击的卡牌视图
+            _onCardClickCallback((*cardIt)->getCardId()); //  调用卡牌点击回调函数，并传入被点击卡牌的ID
+            break; //  找到被点击的卡牌后，退出循环
         }
     }
 }

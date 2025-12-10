@@ -10,16 +10,16 @@
 #include "cocos2d.h"
 
 class CardView : public cocos2d::Node{
-    cocos2d::Sprite* _faceGeneralSprite;
-    cocos2d::Sprite* _backGeneralSprite;
-    cocos2d::Sprite* _suitSprite;
-    cocos2d::Sprite* _numberSprite;
+    cocos2d::Sprite* _faceGeneralSprite; //  面部精灵，用于显示卡牌正面的将军图像
+    cocos2d::Sprite* _backGeneralSprite; //  背面精灵，用于显示卡牌背面的将军图像
+    cocos2d::Sprite* _suitSprite; //  花色精灵，用于显示卡牌的花色图案
+    cocos2d::Sprite* _numberSprite; //  数字精灵，用于显示卡牌的数字或点数
     cocos2d::Sprite* _smallNumberSprite;
     cocos2d::Vec2 _worldPosition;
     int _cardId;
 public:
     static CardView* create(CardModel* cardModel);
-    virtual bool initWithCardModel(CardModel* cardModel);
+    virtual bool initWithCardModel(CardModel* cardModel); //  创建游戏场景
     void setCardId(int cardId);
     int getCardId();
     void setWorldPosition(cocos2d::Vec2 worldPosition);
