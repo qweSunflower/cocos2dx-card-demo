@@ -3,6 +3,8 @@
 .vscode/*
 .vscode/.cache/
 *.idx
+.DS_Store
+.git
 cocos2d/
 proj.android
 proj.ios_mac
