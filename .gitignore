@@ -1,0 +1,10 @@
+.vscode
+.vscode/
+.vscode/*
+.vscode/.cache/
+*.idx
+cocos2d/
+proj.android
+proj.ios_mac
+proj.linux
+proj.win32
