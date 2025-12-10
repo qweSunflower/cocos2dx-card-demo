@@ -13,16 +13,6 @@ public:
 	std::vector<int> cardDesk;
 	std::vector<int> playfield;
 	std::vector<CardModel*> cardModels;
-	// void addCardToPlayfield(CardSuitType suit, CardFaceType face, cocos2d::Vec2 position) {
-	// 	CardModel* card = CardModel::create(suit, face, position);
-	// 	playfield.push_back(cardModels.size());
-	// 	cardModels.push_back(card);
-	// }
-	// void addCardToBackupDesk(CardSuitType suit, CardFaceType face, cocos2d::Vec2 position) {
-	// 	CardModel* card = CardModel::create(suit, face, position);
-	// 	backupDesk.push(cardModels.size());
-	// 	cardModels.push_back(card);
-	// }
 };
 
 
